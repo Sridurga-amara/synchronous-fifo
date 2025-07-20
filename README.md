@@ -10,6 +10,22 @@ This project implements a **Synchronous FIFO (First-In-First-Out)** memory buffe
 - Controlled access using `chip select`, `read enable`, and `write enable` signals  
 - Testbench included to simulate and verify different data write/read scenarios  
 
+## How Synchronous FIFO Works
+
+A Synchronous FIFO operates on a **single clock domain**. Both read and write operations are triggered on the **positive edge of the same clock**.
+
+- **Write Operation**:  
+  When `wr_en` (write enable) and `cs` (chip select) are high and the FIFO is not full, data from `data_in` is written into the memory at the location pointed by `write_pointer`, and the pointer is incremented.
+
+- **Read Operation**:  
+  When `rd_en` (read enable) and `cs` are high and the FIFO is not empty, data is read from the memory at the location pointed by `read_pointer` and transferred to `data_out`, then the pointer is incremented.
+
+- **Status Flags**:  
+  - `full` is asserted when the next write would overwrite unread data.  
+  - `empty` is asserted when there is no data left to read.
+
+This FIFO design uses circular buffer logic with binary pointers and overflow-safe comparison techniques for reliable control.
+
 ## Usefulness
 
 Synchronous FIFOs are essential in digital designs where data needs to be buffered between two subsystems running on the same clock but with different timing or data processing rates. This FIFO ensures that no data is overwritten or lost and helps in achieving smooth data flow within synchronous systems.
